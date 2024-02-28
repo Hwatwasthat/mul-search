@@ -64,6 +64,7 @@ type FilterFields = {
     maxPV?: number;
     dmg?: string;
     move?: string;
+    role?: string;
 };
 
 class Filter {
@@ -85,7 +86,8 @@ class Filter {
             && matchesIfFilter(this.fields.move, (f) => matchMove(f, unit.BFMove))
             && matchesIfFilter(this.fields.minPV, (f) => unit.BFPointValue >= f)
             && matchesIfFilter(this.fields.maxPV, (f) => unit.BFPointValue <= f)
-            && matchesIfFilter(this.fields.dmg, (f) => matchDmg(f, unit));
+            && matchesIfFilter(this.fields.dmg, (f) => matchDmg(f, unit))
+            && includesIfFilter(this.fields.role, unit.Role.Name);
     }
 
     public withOverrides(overrides: FilterFields) {
@@ -135,6 +137,8 @@ function reduceFilter(filter: Filter, action: FilterAction) {
             return filter.withOverrides({ move: action.filter })
         case 'dmg':
             return filter.withOverrides({ dmg: action.filter })
+        case 'role':
+            return filter.withOverrides({ role: action.filter })
         default:
             return filter
     }
@@ -161,6 +165,7 @@ export default function FilteredTable({ data }: { data: IUnit[]} ) {
                 <div className="w-full flex flex-wrap gap-x-2 gap-y-1">
                     <QuickFilter label="Unit Name" className="basis-full md:basis-5/12" action="name" filterCallback={setFilter} />
                     <QuickFilter label="Abilities" className="basis-full md:basis-5/12" action="abilities" filterCallback={setFilter} tooltip='Use comma to search for multiple abilities: "AM, MEC"' />
+                    <QuickFilter label="Role" className="basis-1/5 md:basis-2/12" action="role" filterCallback={setFilter} />
                     <QuickFilter label="Dmg" className="basis-1/5 md:basis-2/12" action="dmg" filterCallback={setFilter} tooltip='"//N" => N at long range, "/5" => 5 at medium, "5/" => 5 at short' />
                     <QuickFilter label="Move" className="basis-1/5 md:basis-2/12" action="move" filterCallback={setFilter} />
                     <QuickFilter label="MinPV" className="basis-1/5 md:basis-2/12" action="min-pv" filterCallback={setFilter} />
