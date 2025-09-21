@@ -63,6 +63,7 @@ export const UnitComparators: Record<string, comparator> = {
         return (order != 0) ? order : movA.length - movB.length
     },
     SynthDmg: (a:IUnit, b:IUnit) => compareDamage(a, b),
+    SynthOV: (a, b) => a.BFOverheat - b.BFOverheat,
     SynthHP: (a, b) => a.BFStructure + a.BFArmor - b.BFStructure - b.BFArmor,
 }
 
@@ -92,15 +93,16 @@ export function UnitHeader({ initial, onSort }: { initial: Sort, onSort: (newSor
     }
 
     return (
-        <div className="font-bold grid grid-cols-9 md:grid-cols-11 my-0 text-xs md:text-sm text-center items-center w-full justify-center justify-items-center">
-            <SortHeader sortId="Name" currentSort={sortState} onSort={handleSort} className="col-span-2 md:col-span-3 text-left">
+        <div className="font-bold grid grid-cols-9 md:grid-cols-12 my-0 text-xs md:text-sm text-center items-center w-full justify-center justify-items-center">
+            <SortHeader sortId="Name" currentSort={sortState} onSort={handleSort} className="col-span-2 md:col-span-2 text-left">
                 Name
             </SortHeader>
             <SortHeader sortId="BFPointValue" currentSort={sortState} onSort={handleSort} className="col-start-3 md:col-start-4">PV</SortHeader>
             <SortHeader sortId="BFRole" currentSort={sortState} onSort={handleSort} className="hidden md:inline-flex">Role</SortHeader>
             <SortHeader sortId="BFMove" currentSort={sortState} onSort={handleSort} className="col-span-2 md:col-span-1">Move</SortHeader>
             <SortHeader sortId="SynthDmg" currentSort={sortState} onSort={handleSort}> Dmg</SortHeader>
-            <SortHeader sortId="SynthHP" currentSort={sortState} onSort={handleSort} className="col-span-2 md:col-span-1">HP<br />(A/S)</SortHeader>
+            <SortHeader sortId="SynthHP" currentSort={sortState} onSort={handleSort} className="col-span-1 md:col-span-1">HP<br />(A/S)</SortHeader>
+            <SortHeader sortId="SynthOV" currentSort={sortState} onSort={handleSort}>OV</SortHeader>
             <div className="hidden md:block md:col-span-2 text-left">Abilities...</div>
             <div>Add</div>
         </div>
@@ -118,18 +120,19 @@ export default function UnitLine({ unit, idx }: { unit: IUnit, idx: number }) {
 
     return (
         <>
-            <div className="grid grid-cols-10 md:grid-cols-12 my-0 border border-solid border-gray-400 dark:border-gray-800 text-xs md:text-sm text-center items-center w-full bg-inherit">
+            <div className="grid grid-cols-12 md:grid-cols-12 my-0 border border-solid border-gray-400 dark:border-gray-800 text-xs md:text-sm text-center items-center w-full bg-inherit">
                 <button className="btn btn-square btn-xs" onClick={onAddClick}>
                     <PlusIcon className="h-3 w-3"/>
                 </button>
-                <div className="col-span-2 md:col-span-3 text-left">
+                <div className="col-span-2 md:col-span-2 text-left">
                     <a href={"http://www.masterunitlist.info/Unit/Details/" + unit.Id} target="_blank">{unit.Name}</a>
                 </div>
-                <div className="col-start-4 md:col-start-5">{unit.BFPointValue}</div>
+                <div className="col-start-4 md:col-start-4">{unit.BFPointValue}</div>
                 <div className="truncate hidden md:block">{unit.Role.Name}</div>
                 <div className="col-span-2 md:col-span-1">{unit.BFMove}</div>
                 <div>{unit.BFDamageShort}/{unit.BFDamageMedium}/{unit.BFDamageLong}</div>
                 <div className="col-span-2 md:col-span-1">{unit.BFArmor} + {unit.BFStructure}</div>
+                <div className="col-span-1 md:col-span-1">{unit.BFOverheat}</div>
                 <div className="text-xs truncate hidden md:block md:col-span-2 text-left">{unit.BFAbilities}</div>
                 <button className="btn btn-square btn-xs" onClick={onAddClick}>
                     <PlusIcon className="h-3 w-3"/>

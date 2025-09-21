@@ -49,6 +49,7 @@ export function ListLine({ unit, controller }: { unit: ISelectedUnit; controller
                 <div>{unit.BFMove}</div>
                 <div>{unit.BFDamageShort}/{unit.BFDamageMedium}/{unit.BFDamageLong}</div>
                 <div>{unit.BFArmor} + {unit.BFStructure}</div>
+                <div>{unit.BFOverheat}</div>
                 <div className="hidden md:block text-xs truncate col-span-2 md:col-span-3 text-left">{unit.BFAbilities}</div>
             </div>
             <button className="grow-0 btn btn-xs btn-square" onClick={e => { controller.removeUnit(unit.ordinal); }}>
