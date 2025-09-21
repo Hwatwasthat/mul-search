@@ -164,7 +164,7 @@ class Filter {
     }
 
     public matches(unit: IUnit) {
-        console.log("minOV: " + this.fields.minOV);
+
         return includesIfFilter(this.fields.name, unit.Name)
             && matchesIfFilter(this.fields.abilities, (f) => matchAbilities(f, unit.BFAbilities))
             && matchesIfFilter(this.fields.moveFilter, (f) => matchMove(f, unit.BFMove))
