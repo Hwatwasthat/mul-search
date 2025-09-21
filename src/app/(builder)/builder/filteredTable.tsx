@@ -136,6 +136,8 @@ type FilterFields = {
     moveFilter?: MoveFilter;
     minSz?: number;
     maxSz?: number;
+    minOV?: number;
+    maxOV?: number,
     experimental?: boolean;
 };
 
@@ -162,7 +164,7 @@ class Filter {
     }
 
     public matches(unit: IUnit) {
-
+        console.log("minOV: " + this.fields.minOV);
         return includesIfFilter(this.fields.name, unit.Name)
             && matchesIfFilter(this.fields.abilities, (f) => matchAbilities(f, unit.BFAbilities))
             && matchesIfFilter(this.fields.moveFilter, (f) => matchMove(f, unit.BFMove))
@@ -170,6 +172,8 @@ class Filter {
             && matchesIfFilter(this.fields.maxPV, (f) => unit.BFPointValue <= f)
             && matchesIfFilter(this.fields.minSz, (f) => unit.BFSize >= f)
             && matchesIfFilter(this.fields.maxSz, (f) => unit.BFSize <= f)
+            && matchesIfFilter(this.fields.minOV, (f) => unit.BFOverheat >= f)
+            && matchesIfFilter(this.fields.maxOV, (f) => unit.BFOverheat <= f)
             && matchesIfFilter(this.fields.dmg, (f) => matchDmg(f, unit))
             && this.matchesExperimental(unit)
     }
@@ -278,6 +282,17 @@ export default function FilteredTable({ data }: { data: IUnit[] }) {
                             }
                         }
                         tooltip='"4" for exactly 4, "3:" for 3 or larger' />
+                    <QuickFilter
+                        label="Overheat (min:max)"
+                        className="col-span-2"
+                        filterCallback={
+                            flt => {
+                                const [minOV, maxOV] = parseRange(flt)
+                                updateFilter({ minOV: minOV, maxOV: maxOV })
+                            }
+                        }
+                        tooltip='"1" for exactly 1, "1: for 1 or larger"'
+                    />
                     <QuickCheck label="Experimental Rules" className="col-span-2 overflow-hidden text-ellipsis" filterCallback={flt => updateFilter({experimental: flt})} />
                 </div>
                 <div className="text-sm">
