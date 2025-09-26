@@ -44,6 +44,18 @@ function parseMoveRange(filter: string | undefined): MoveFilter | undefined {
     return undefined
 }
 
+function parseOverheat(filters: string | undefined): [(string | undefined), (number | undefined)[]] {
+    if (filters) {
+        const [filter, ov_query] = filters.split(' ')
+        const overheat = parseRange(ov_query)
+        return [
+            filter,
+            overheat
+        ]
+    }
+    return [undefined, noFilter]
+}
+
 function parseRange(filter: string | undefined): (number | undefined)[] {
     if (filter) {
         const match = rangeRex.exec(filter)
@@ -259,7 +271,16 @@ export default function FilteredTable({ data }: { data: IUnit[] }) {
                 <div className="w-full grid grid-cols-6 md:grid-cols-8 gap-x-2 gap-y-1 overflow-x-clip overflow-y-visible hover:overflow-x-visible">
                     <QuickFilter label="Unit Name" className="col-span-6 md:col-span-3" filterCallback={flt => updateFilter({ name: flt })} />
                     <QuickFilter label="Abilities" className="col-span-2 md:col-span-3" filterCallback={flt => updateFilter({ abilities: flt })} tooltip='Use comma to search for multiple abilities: "AM, MEC"' />
-                    <QuickFilter label="Dmg" className="col-span-2 md:col-span-2" filterCallback={flt => updateFilter({ dmg: flt })} tooltip='"//N" => N at long range, "/5" => 5 at medium, "5/" => 5 at short' />
+                    <QuickFilter 
+                        label="Dmg (s/m/l ov(min:max))" 
+                        className="col-span-2 md:col-span-2" 
+                        filterCallback={
+                            flt => {
+                                const [dmg, [minOV, maxOV]] = parseOverheat(flt)
+                                updateFilter({ dmg: dmg, minOV: minOV, maxOV: maxOV })
+                            }
+                        } 
+                        tooltip='"//N" => N at long range, "/5" => 5 at medium, "5/" => 5 at short' />
                     <QuickFilter label="Move (min:max)" className="col-span-2 md:col-span-2" filterCallback={flt => updateFilter({ moveFilter: parseMoveRange(flt) })} tooltip='"8:14j" for 8<=move<=14 jumping or 12 for exactly 12 any mode' />
                     <QuickFilter
                         label="PV (min:max)"
@@ -282,17 +303,6 @@ export default function FilteredTable({ data }: { data: IUnit[] }) {
                             }
                         }
                         tooltip='"4" for exactly 4, "3:" for 3 or larger' />
-                    <QuickFilter
-                        label="Overheat (min:max)"
-                        className="col-span-2"
-                        filterCallback={
-                            flt => {
-                                const [minOV, maxOV] = parseRange(flt)
-                                updateFilter({ minOV: minOV, maxOV: maxOV })
-                            }
-                        }
-                        tooltip='"1" for exactly 1, "1: for 1 or larger"'
-                    />
                     <QuickCheck label="Experimental Rules" className="col-span-2 overflow-hidden text-ellipsis" filterCallback={flt => updateFilter({experimental: flt})} />
                 </div>
                 <div className="text-sm">
