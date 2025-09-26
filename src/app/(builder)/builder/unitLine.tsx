@@ -124,7 +124,8 @@ export default function UnitLine({ unit, idx }: { unit: IUnit, idx: number }) {
                 <button className="btn btn-square btn-xs" onClick={onAddClick}>
                     <PlusIcon className="h-3 w-3"/>
                 </button>
-                <div className="col-span-2 md:col-span-2 text-left">
+                <div className="col-span-2 text-left">
+
                     <a href={"http://www.masterunitlist.info/Unit/Details/" + unit.Id} target="_blank">{unit.Name}</a>
                 </div>
                 <div>{unit.BFPointValue}</div>
@@ -134,7 +135,8 @@ export default function UnitLine({ unit, idx }: { unit: IUnit, idx: number }) {
                 <div className="col-span-2 md:col-span-1">{unit.BFDamageShort}/{unit.BFDamageMedium}/{unit.BFDamageLong} | {unit.BFOverheat}</div>
                 <div className="text-right md:text-center">{unit.BFArmor} + {unit.BFStructure}</div>
 
-                <div className="text-xs hidden md:block md:col-span-2 text-left">{unit.BFAbilities}</div>
+                <div className="text-xs truncate hidden md:block md:col-span-2 text-left">{unit.BFAbilities}</div>
+
                 <button className="btn btn-square btn-xs col-start-12" onClick={onAddClick}>
                     <PlusIcon className="h-3 w-3"/>
                 </button>
