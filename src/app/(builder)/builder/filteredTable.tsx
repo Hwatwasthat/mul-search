@@ -272,7 +272,8 @@ export default function FilteredTable({ data }: { data: IUnit[] }) {
                     <QuickFilter label="Unit Name" className="col-span-6 md:col-span-3" filterCallback={flt => updateFilter({ name: flt })} />
                     <QuickFilter label="Abilities" className="col-span-2 md:col-span-3" filterCallback={flt => updateFilter({ abilities: flt })} tooltip='Use comma to search for multiple abilities: "AM, MEC"' />
                     <QuickFilter 
-                        label="Dmg (s/m/l ov(min:max))" 
+                        label="Dmg (s/m/l minOV:maxOV)" 
+
                         className="col-span-2 md:col-span-2" 
                         filterCallback={
                             flt => {

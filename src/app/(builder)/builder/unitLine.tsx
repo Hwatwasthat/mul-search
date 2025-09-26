@@ -99,7 +99,8 @@ export function UnitHeader({ initial, onSort }: { initial: Sort, onSort: (newSor
             </SortHeader>
             <SortHeader sortId="BFPointValue" currentSort={sortState} onSort={handleSort}>PV</SortHeader>
             <SortHeader sortId="BFRole" currentSort={sortState} onSort={handleSort} className="hidden md:inline-flex">Role</SortHeader>
-            <SortHeader sortId="BFMove" currentSort={sortState} onSort={handleSort} className="col-span-1 md:col-span-1">Move</SortHeader>
+            <SortHeader sortId="BFMove" currentSort={sortState} onSort={handleSort}>Move</SortHeader>
+
             <SortHeader sortId="SynthDmg" currentSort={sortState} onSort={handleSort} className="col-span-2 md:col-span-1"> Dmg<br/>(S/M/L | OV)</SortHeader>
             <SortHeader sortId="SynthHP" currentSort={sortState} onSort={handleSort} className="col-span-2 md:col-span-1">HP<br />(A/S)</SortHeader>
             <div className="hidden md:block md:col-span-1 text-left">Abilities...</div>
@@ -128,9 +129,11 @@ export default function UnitLine({ unit, idx }: { unit: IUnit, idx: number }) {
                 </div>
                 <div>{unit.BFPointValue}</div>
                 <div className="truncate hidden md:block">{unit.Role.Name}</div>
-                <div className="col-span-1 md:col-span-1">{unit.BFMove}</div>
+                <div>{unit.BFMove}</div>
+
                 <div className="col-span-2 md:col-span-1">{unit.BFDamageShort}/{unit.BFDamageMedium}/{unit.BFDamageLong} | {unit.BFOverheat}</div>
-                <div className="text-right col-span-1 md:col-span-1 md:text-center">{unit.BFArmor} + {unit.BFStructure}</div>
+                <div className="text-right md:text-center">{unit.BFArmor} + {unit.BFStructure}</div>
+
                 <div className="text-xs hidden md:block md:col-span-2 text-left">{unit.BFAbilities}</div>
                 <button className="btn btn-square btn-xs col-start-12" onClick={onAddClick}>
                     <PlusIcon className="h-3 w-3"/>
