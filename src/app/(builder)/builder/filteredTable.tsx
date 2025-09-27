@@ -246,7 +246,7 @@ function QuickCheck({ label, className, filterCallback, tooltip }: FilterParams<
 
 }
 
-export default function FilteredTable({ data }: { data: IUnit[] }) {
+export default function FilteredTable({ data, mech}: { data: IUnit[], mech: boolean }) {
     const params = useSearchParams()
     const [units, setUnits] = useState(data)
     const [filter, setFilter] = useState(new Filter())
@@ -265,6 +265,18 @@ export default function FilteredTable({ data }: { data: IUnit[] }) {
         setFilter(filter.withOverrides(fields))
     }
 
+    function filterMech(filter: string | undefined) {
+        const [dmg, [minOV, maxOV]] = parseOverheat(filter)
+        updateFilter({ dmg: dmg, minOV: minOV, maxOV: maxOV })
+    }
+
+    function filterOthers(filter: string | undefined) {
+        updateFilter({ dmg: filter })
+    }
+
+    const dmgLabel = mech ? "Dmg (s/m/l minOV:maxOV)" : "Dmg (s/m/l)"
+    const damageFilter = mech ? filterMech : filterOthers
+
     return (
         <>
             <div className="sticky z-15 top-0 mt-2 items-center text-center bg-inherit border-b border-b-solid border-b-1 border-b-black dark:border-b-white text-sm">
@@ -272,15 +284,9 @@ export default function FilteredTable({ data }: { data: IUnit[] }) {
                     <QuickFilter label="Unit Name" className="col-span-6 md:col-span-3" filterCallback={flt => updateFilter({ name: flt })} />
                     <QuickFilter label="Abilities" className="col-span-2 md:col-span-3" filterCallback={flt => updateFilter({ abilities: flt })} tooltip='Use comma to search for multiple abilities: "AM, MEC"' />
                     <QuickFilter 
-                        label="Dmg (s/m/l minOV:maxOV)" 
-
+                        label={dmgLabel}
                         className="col-span-2 md:col-span-2" 
-                        filterCallback={
-                            flt => {
-                                const [dmg, [minOV, maxOV]] = parseOverheat(flt)
-                                updateFilter({ dmg: dmg, minOV: minOV, maxOV: maxOV })
-                            }
-                        } 
+                        filterCallback={damageFilter}
                         tooltip='"//N" => N at long range, "/5" => 5 at medium, "5/" => 5 at short' />
                     <QuickFilter label="Move (min:max)" className="col-span-2 md:col-span-2" filterCallback={flt => updateFilter({ moveFilter: parseMoveRange(flt) })} tooltip='"8:14j" for 8<=move<=14 jumping or 12 for exactly 12 any mode' />
                     <QuickFilter
@@ -307,7 +313,7 @@ export default function FilteredTable({ data }: { data: IUnit[] }) {
                     <QuickCheck label="Experimental Rules" className="col-span-2 overflow-hidden text-ellipsis" filterCallback={flt => updateFilter({experimental: flt})} />
                 </div>
                 <div className="text-sm">
-                    <UnitHeader initial={sort} onSort={setSort} />
+                    <UnitHeader initial={sort} onSort={setSort} mech={mech}/>
                 </div>
             </div>
             <div className="text-sm mb-2 striped">
@@ -315,7 +321,7 @@ export default function FilteredTable({ data }: { data: IUnit[] }) {
                     sortAndFilter(units).map(
                         (entry, idx) => {
                             return (
-                                <UnitLine key={(params.get('era')||"") +entry.Id} unit={entry} idx={idx} />
+                                <UnitLine key={(params.get('era')||"") +entry.Id} unit={entry} idx={idx} mech={mech} />
                             )
                         }
                     )

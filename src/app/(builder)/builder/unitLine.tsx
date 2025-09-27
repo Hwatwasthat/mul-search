@@ -84,7 +84,7 @@ function SortHeader({ sortId, currentSort, onSort, children, className }: { sort
     )
 }
 
-export function UnitHeader({ initial, onSort }: { initial: Sort, onSort: (newSort: Sort) => void }) {
+export function UnitHeader({ initial, onSort, mech }: { initial: Sort, onSort: (newSort: Sort) => void , mech: boolean}) {
     const [sortState, setSortState] = useState(initial)
 
     function handleSort(sort: Sort) {
@@ -92,6 +92,7 @@ export function UnitHeader({ initial, onSort }: { initial: Sort, onSort: (newSor
         onSort(sort)
     }
 
+    const overheat = mech ? " | OV)" : ")"
     return (
         <div className="font-bold grid grid-cols-9 md:grid-cols-12 my-0 text-xs md:text-sm text-center items-center w-full justify-center justify-items-center">
             <SortHeader sortId="Name" currentSort={sortState} onSort={handleSort} className="col-span-3 md:col-span-3 text-left">
@@ -101,7 +102,7 @@ export function UnitHeader({ initial, onSort }: { initial: Sort, onSort: (newSor
             <SortHeader sortId="BFRole" currentSort={sortState} onSort={handleSort} className="hidden md:inline-flex">Role</SortHeader>
             <SortHeader sortId="BFMove" currentSort={sortState} onSort={handleSort}>Move</SortHeader>
 
-            <SortHeader sortId="SynthDmg" currentSort={sortState} onSort={handleSort} className="col-span-2 md:col-span-1"> Dmg<br/>(S/M/L | OV)</SortHeader>
+            <SortHeader sortId="SynthDmg" currentSort={sortState} onSort={handleSort} className="col-span-2 md:col-span-1">Dmg<br/>(S/M/L{overheat}</SortHeader>
             <SortHeader sortId="SynthHP" currentSort={sortState} onSort={handleSort} className="col-span-2 md:col-span-1">HP<br />(A/S)</SortHeader>
             <div className="hidden md:block md:col-span-1 text-left">Abilities...</div>
             <div className="col-start-12">Add</div>
@@ -109,7 +110,7 @@ export function UnitHeader({ initial, onSort }: { initial: Sort, onSort: (newSor
     )
 }
 
-export default function UnitLine({ unit, idx }: { unit: IUnit, idx: number }) {
+export default function UnitLine({ unit, idx, mech }: { unit: IUnit, idx: number, mech: boolean }) {
 
     const controller: ListBuilderController = useBuilderContext()
 
@@ -118,6 +119,7 @@ export default function UnitLine({ unit, idx }: { unit: IUnit, idx: number }) {
         controller.guardedAddUnit(unit)
     }
 
+    const overheat = mech ? " | " + unit.BFOverheat : "";
     return (
         <>
             <div className="grid grid-cols-9 md:grid-cols-12 my-0 border border-solid border-gray-400 dark:border-gray-800 text-xs md:text-sm text-center items-center w-full bg-inherit">
@@ -132,7 +134,7 @@ export default function UnitLine({ unit, idx }: { unit: IUnit, idx: number }) {
                 <div className="truncate hidden md:block">{unit.Role.Name}</div>
                 <div>{unit.BFMove}</div>
 
-                <div className="col-span-2 md:col-span-1">{unit.BFDamageShort}/{unit.BFDamageMedium}/{unit.BFDamageLong} | {unit.BFOverheat}</div>
+                <div className="col-span-2 md:col-span-1">{unit.BFDamageShort}/{unit.BFDamageMedium}/{unit.BFDamageLong}{overheat}</div>
                 <div className="text-right md:text-center">{unit.BFArmor} + {unit.BFStructure}</div>
 
                 <div className="text-xs truncate hidden md:block md:col-span-2 text-left">{unit.BFAbilities}</div>
