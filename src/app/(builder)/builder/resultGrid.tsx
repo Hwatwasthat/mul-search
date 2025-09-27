@@ -39,7 +39,7 @@ function ResultTab({ search, typeId }: { search: MULSearchParams, typeId: number
         return data
     }
     return (
-        <FilteredTable key={search.toUrl(typeId)} data={data} />
+        <FilteredTable key={search.toUrl(typeId)} data={data} mech={typeId == 18}/>
     )
 }
 
