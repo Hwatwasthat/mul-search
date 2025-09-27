@@ -274,8 +274,7 @@ export default function FilteredTable({ data, mech}: { data: IUnit[], mech: bool
         updateFilter({ dmg: filter })
     }
 
-    const dmgLabel = mech ? "Dmg (s/m/l minOV:maxOV)" : "Dmg (s/m/l)"
-    const damageFilter = mech ? filterMech : filterOthers
+    const [dmgLabel, dmgFilter] = mech ? ["Dmg (s/m/l minOV:maxOV)", filterMech] : ["Dmg (s/m/l)", filterOthers]
 
     return (
         <>
@@ -286,7 +285,7 @@ export default function FilteredTable({ data, mech}: { data: IUnit[], mech: bool
                     <QuickFilter 
                         label={dmgLabel}
                         className="col-span-2 md:col-span-2" 
-                        filterCallback={damageFilter}
+                        filterCallback={dmgFilter}
                         tooltip='"//N" => N at long range, "/5" => 5 at medium, "5/" => 5 at short' />
                     <QuickFilter label="Move (min:max)" className="col-span-2 md:col-span-2" filterCallback={flt => updateFilter({ moveFilter: parseMoveRange(flt) })} tooltip='"8:14j" for 8<=move<=14 jumping or 12 for exactly 12 any mode' />
                     <QuickFilter
