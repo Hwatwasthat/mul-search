@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { ISelectedUnit, currentPV } from '../../../api/unitListApi';
-import { ListBuilderController } from './listBuilderController';
+import { formatDamageString, ListBuilderController } from './listBuilderController';
 import { MinusIcon } from '@heroicons/react/24/outline';
 
 const LANCES = [...Array(20).keys()].map((n) => `${n}`.padStart(2, "0")).map((l) => <option key={`${l}`} value={l}>{l}</option>);
@@ -22,7 +22,7 @@ export function ListLine({ unit, controller }: { unit: ISelectedUnit; controller
         setLance(newLance);
         controller.updateTotal();
     }
-    const dmgString = unit.BFDamageShort + "/" + unit.BFDamageMedium + "/" + unit.BFDamageLong + (unit.Type.Id == 18 ?  " | " + unit.BFOverheat :  "")
+    const dmgString = formatDamageString(unit, unit.Type.Id == 18)
     return (
         <div className="flex flex-nowrap w-full border border-solid border-gray-400 dark:border-gray-800 text-center items-center">
             <select className="grow-0 hidden md:block bg-base-200 select-bordered select-xs min-h-[1rem] h-3 leading-3 text-xs rounded-sm px-1 mr-2" value={unit.lance || ''} onChange={(e) => lanceOnSelect(e.target.value)}>
