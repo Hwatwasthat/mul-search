@@ -240,3 +240,7 @@ export const ListBuilderContext = createContext<ListBuilderController>(
 export function useBuilderContext() {
     return useContext(ListBuilderContext)
 }
+
+export function formatDamageString(unit: IUnit, mech: boolean) {
+    return unit.BFDamageShort + "/" + unit.BFDamageMedium + "/" + unit.BFDamageLong + (mech ? " | " + unit.BFOverheat : "")
+}

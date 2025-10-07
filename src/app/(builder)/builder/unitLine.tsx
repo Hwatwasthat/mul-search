@@ -3,7 +3,7 @@ import { Sort } from "./filteredTable"
 import { useState } from "react"
 import { BarsArrowDownIcon, BarsArrowUpIcon } from "@heroicons/react/16/solid"
 import { PlusIcon } from "@heroicons/react/24/outline"
-import { ListBuilderController, useBuilderContext } from "./listBuilderController"
+import { ListBuilderController, useBuilderContext, formatDamageString } from "./listBuilderController"
 
 export const EMPTY_UNIT = {
     Id: 0,
@@ -118,8 +118,7 @@ export default function UnitLine({ unit, idx, mech }: { unit: IUnit, idx: number
         e.preventDefault()
         controller.guardedAddUnit(unit)
     }
-
-    const overheat = mech ? " | " + unit.BFOverheat : "";
+    const dmgString = formatDamageString(unit, mech)
     return (
         <>
             <div className="grid grid-cols-9 md:grid-cols-12 my-0 border border-solid border-gray-400 dark:border-gray-800 text-xs md:text-sm text-center items-center w-full bg-inherit">
@@ -134,7 +133,7 @@ export default function UnitLine({ unit, idx, mech }: { unit: IUnit, idx: number
                 <div className="truncate hidden md:block">{unit.Role.Name}</div>
                 <div>{unit.BFMove}</div>
 
-                <div className="col-span-2 md:col-span-1">{unit.BFDamageShort}/{unit.BFDamageMedium}/{unit.BFDamageLong}{overheat}</div>
+                <div className="col-span-2 md:col-span-1">{dmgString}</div>
                 <div className="text-right md:text-center">{unit.BFArmor} + {unit.BFStructure}</div>
 
                 <div className="text-xs truncate hidden md:block md:col-span-2 text-left">{unit.BFAbilities}</div>
