@@ -22,7 +22,7 @@ export function ListLine({ unit, controller }: { unit: ISelectedUnit; controller
         setLance(newLance);
         controller.updateTotal();
     }
-
+    const dmgString = unit.BFDamageShort + "/" + unit.BFDamageMedium + "/" + unit.BFDamageLong + (unit.Type.Id == 18 ?  " | " + unit.BFOverheat :  "")
     return (
         <div className="flex flex-nowrap w-full border border-solid border-gray-400 dark:border-gray-800 text-center items-center">
             <select className="grow-0 hidden md:block bg-base-200 select-bordered select-xs min-h-[1rem] h-3 leading-3 text-xs rounded-sm px-1 mr-2" value={unit.lance || ''} onChange={(e) => lanceOnSelect(e.target.value)}>
@@ -47,9 +47,9 @@ export function ListLine({ unit, controller }: { unit: ISelectedUnit; controller
                 <div>{currentPV(unit)}</div>
                 <div>{unit.Role.Name}</div>
                 <div>{unit.BFMove}</div>
-                <div>{unit.BFDamageShort}/{unit.BFDamageMedium}/{unit.BFDamageLong}</div>
+                <div>{dmgString}</div>
                 <div>{unit.BFArmor} + {unit.BFStructure}</div>
-                <div>{unit.BFOverheat}</div>
+                {/* <div>{unit.BFOverheat}</div> */}
                 <div className="hidden md:block text-xs truncate col-span-2 md:col-span-3 text-left">{unit.BFAbilities}</div>
             </div>
             <button className="grow-0 btn btn-xs btn-square" onClick={e => { controller.removeUnit(unit.ordinal); }}>
